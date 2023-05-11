@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import React, { useState } from 'react';
+import data from './data/data';
+import Nav from './components/Nav';
+import List from './components/List';
+import Insert from './components/Insert';
 function App() {
+  const [collaborators, setCollaborators] = useState(data);
+  const [search, setSearch] = useState('');
+
+  const handleSearChange = (value) => {
+    setSearch(value);
+  }
+  const handleAddCollaborator = (collaborator) => {
+    const updateCollaborator={
+      ...collaborator,
+      id: collaborators.length + 1
+    }
+    setCollaborators([...collaborators, updateCollaborator]);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container-fluid">
+      <Nav onSearchChange={handleSearChange} />
+      <div className="container">
+        <Insert onSubmit={handleAddCollaborator}/>
+        <List collaborators={collaborators} searchTerm={search} />
+      </div>
     </div>
   );
 }
